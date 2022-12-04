@@ -4,8 +4,8 @@ import 'dart:io';
 // Top elf calories, listed by food item in day_1_input.txt with elfs
 // seperarted by lines
 int task_1() {
-  var inputFile = File('input_files/day_1_input.txt');
-  List<String> lines = inputFile.readAsLinesSync();
+  final inputFile = File('input_files/day_1_input.txt');
+  final List<String> lines = inputFile.readAsLinesSync();
   int elfTotal = 0;
   int currentLargest = 0;
 
@@ -53,8 +53,8 @@ class TopElf {
 }
 
 int task_2() {
-  var inputFile = File('input_files/day_1_input.txt');
-  List<String> lines = inputFile.readAsLinesSync();
+  final inputFile = File('input_files/day_1_input.txt');
+  final List<String> lines = inputFile.readAsLinesSync();
   var topElf = TopElf();
   int elfTotal = 0;
 
@@ -158,14 +158,14 @@ enum HandChoice {
 
 int task_3() {
   final inputFile = File('input_files/day_2_input.txt');
-  List<String> lines = inputFile.readAsLinesSync();
+  final List<String> lines = inputFile.readAsLinesSync();
 
   var totalScore = 0;
 
   for (final line in lines) {
     final codes = line.split(' ');
-    HandChoice opponent = HandChoice.decode(codes[0]);
-    HandChoice player = HandChoice.decode(codes[1]);
+    final HandChoice opponent = HandChoice.decode(codes[0]);
+    final HandChoice player = HandChoice.decode(codes[1]);
 
     final gameOutcome = player.compare(opponent);
     totalScore += gameOutcome.score + player.score;
@@ -176,13 +176,13 @@ int task_3() {
 
 int task_4() {
   final inputFile = File('input_files/day_2_input.txt');
-  List<String> lines = inputFile.readAsLinesSync();
+  final List<String> lines = inputFile.readAsLinesSync();
 
   var totalScore = 0;
 
   for (var line in lines) {
     final codes = line.split(' ');
-    HandChoice opponent = HandChoice.decode(codes[0]);
+    final HandChoice opponent = HandChoice.decode(codes[0]);
     HandChoice player;
 
     switch (codes[1]) {
@@ -257,7 +257,7 @@ class ItemPriority {
 
   int get(String char) {
     if (char.length != 1) throw Exception('Only length 1 chars allowed!');
-    var priority = items[char];
+    final priority = items[char];
     if (priority == null) throw Exception('Unknown item - no priority assigned');
     return(priority);
   }
@@ -286,13 +286,13 @@ class ElfBackpack {
 
   Set<String> returnCompDuplicates() {
     final duplicateCodes = compartment1.intersection(compartment2);
-    var duplicateChars = _setCodeToString(duplicateCodes);
+    final duplicateChars = _setCodeToString(duplicateCodes);
     return(duplicateChars);
   }
 
   Set<String> returnPackDuplicates(ElfBackpack comparison) {
-    var duplicateCodes = codePointSet.intersection(comparison.codePointSet);
-    var duplicateChars = _setCodeToString(duplicateCodes);
+    final duplicateCodes = codePointSet.intersection(comparison.codePointSet);
+    final duplicateChars = _setCodeToString(duplicateCodes);
     return(duplicateChars);
   }
 
@@ -307,7 +307,7 @@ class ElfBackpack {
 
 int task_5() {
   final inputFile = File('input_files/day_3_input.txt');
-  List<String> lines = inputFile.readAsLinesSync();
+  final List<String> lines = inputFile.readAsLinesSync();
   final itemPriority = ItemPriority();
   var totalPriorities = 0;
 
@@ -373,7 +373,7 @@ int task_7() {
 // DAY 4, task 2
 int task_8() {
   final inputFile = File('input_files/day_4_input.txt');
-  List<String> lines = inputFile.readAsLinesSync();
+  final List<String> lines = inputFile.readAsLinesSync();
 
   var total = 0;
 
