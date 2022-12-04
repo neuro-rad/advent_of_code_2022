@@ -5,5 +5,8 @@
 # Conventional directory for build output.
 build/
 
+# Idea
+.idea/
+
 # Files I do not own
 input_files
