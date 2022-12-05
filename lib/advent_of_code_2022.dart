@@ -394,3 +394,40 @@ int task_8() {
 
   return(total);
 }
+
+// DAY 5, task 1
+String task_9() {
+  List<String> col1 = ['T', 'P', 'Z', 'C', 'S', 'L', 'Q', 'N'];
+  List<String> col2 = ['L', 'P', 'T', 'V', 'H', 'C', 'G'];
+  List<String> col3 = ['D', 'C', 'Z', 'F'];
+  List<String> col4 = ['G', 'W', 'T', 'D', 'L', 'M', 'V', 'C'];
+  List<String> col5 = ['P', 'W', 'C'];
+  List<String> col6 = ['P', 'F', 'J', 'D', 'C', 'T', 'S', 'Z'];
+  List<String> col7 = ['V', 'W', 'G', 'B', 'D'];
+  List<String> col8 = ['N', 'J', 'S', 'Q', 'H', 'W'];
+  List<String> col9 = ['R', 'C', 'Q', 'F', 'S', 'L', 'V'];
+  var cols = [col1, col2, col3, col4, col5, col6, col7, col8, col9];
+
+  final inputFile = File('input_files/day_5_input.txt');
+  final List<String> lines = inputFile.readAsLinesSync();
+
+  final pattern = RegExp(r'^move ([0-9]+) from ([0-9]+) to ([0-9]+)$');
+
+  for (var line in lines) {
+    RegExpMatch? match = pattern.firstMatch(line);
+    if (match == null) continue;
+    final numToMove = int.parse(match[1]!);
+    final fromCol = int.parse(match[2]!);
+    final toCol = int.parse(match[3]!);
+
+    for(var i = 1; i <= numToMove; i++) {
+      cols[toCol - 1].add(cols[fromCol - 1].removeLast());
+    }
+  }
+
+  String topOfEachCol = "";
+  for (var col in cols) {
+    topOfEachCol = topOfEachCol + col.last;
+  }
+  return(topOfEachCol);
+}
