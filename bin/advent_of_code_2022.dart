@@ -11,5 +11,6 @@ void main(List<String> arguments) {
   print('Task 7 answer: ${advent_of_code_2022.task_7()}');
   print('Task 8 answer: ${advent_of_code_2022.task_8()}');
   print('Task 9 answer: ${advent_of_code_2022.task_9()}');
+  print('Task 10 answer: ${advent_of_code_2022.task_10()}');
 
 }
