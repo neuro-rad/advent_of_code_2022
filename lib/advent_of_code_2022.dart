@@ -118,41 +118,19 @@ enum HandChoice {
   }
 
   GameOutcome compare(HandChoice opponent) {
+    if (this == opponent) return GameOutcome.draw;
     switch (this) {
-
-      // Caller is a rock
       case HandChoice.rock:
-        switch (opponent) {
-          case HandChoice.rock:
-            return GameOutcome.draw;
-          case HandChoice.paper:
-            return GameOutcome.loss;
-          case HandChoice.scissors:
-            return GameOutcome.win;
-      }
-
-      // Caller is paper
+        if (opponent == HandChoice.scissors) return GameOutcome.win;
+        break;
       case HandChoice.paper:
-        switch (opponent) {
-          case HandChoice.rock:
-            return GameOutcome.win;
-          case HandChoice.paper:
-            return GameOutcome.draw;
-          case HandChoice.scissors:
-            return GameOutcome.loss;
-        }
-
-        // Caller is scissors
-        case HandChoice.scissors:
-          switch (opponent) {
-            case HandChoice.rock:
-              return GameOutcome.loss;
-            case HandChoice.paper:
-              return GameOutcome.win;
-            case HandChoice.scissors:
-              return GameOutcome.draw;
-          }
+        if (opponent == HandChoice.rock) return GameOutcome.win;
+        break;
+      case HandChoice.scissors:
+        if (opponent == HandChoice.paper) return GameOutcome.win;
+        break;
     }
+    return GameOutcome.loss;
   }
 }
 
