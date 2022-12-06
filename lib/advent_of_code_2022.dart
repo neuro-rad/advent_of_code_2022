@@ -460,13 +460,13 @@ String task_10() {
 
 
 // DAY 6
-int findMarker(String signal, int length) {
-  for (var i = length - 1; i < signal.length; i++) {
+int findMarker(String signal, int groupLength) {
+  for (var i = groupLength - 1; i < signal.length; i++) {
     Set<String> group = {};
-    for (var j = i - length + 1; j <= i; j++) {
+    for (var j = i - groupLength + 1; j <= i; j++) {
       group.add(signal[j]);
     }
-    if (group.length == length) {
+    if (group.length == groupLength) {
       return i + 1;
     }
   }
