@@ -179,17 +179,7 @@ int task_4() {
         break;
 
       case 'Y': // Need to draw
-        switch (opponent) {
-          case HandChoice.rock:
-            player = HandChoice.rock;
-            break;
-          case HandChoice.paper:
-            player = HandChoice.paper;
-            break;
-          case HandChoice.scissors:
-            player = HandChoice.scissors;
-            break;
-        }
+        player = opponent;
         break;
 
       case 'Z': // Need to win
@@ -466,4 +456,31 @@ String task_10() {
   }
 
   return('$crane');
+}
+
+
+// DAY 6
+int findMarker(String signal, int length) {
+  for (var i = length - 1; i < signal.length; i++) {
+    Set<String> group = {};
+    for (var j = i - length + 1; j <= i; j++) {
+      group.add(signal[j]);
+    }
+    if (group.length == length) {
+      return i + 1;
+    }
+  }
+  return 0;
+}
+
+int task_11() {
+  final inputFile = File('input_files/day_6_input.txt');
+  final String signal = inputFile.readAsStringSync();
+  return findMarker(signal, 4);
+}
+
+int task_12() {
+  final inputFile = File('input_files/day_6_input.txt');
+  final String signal = inputFile.readAsStringSync();
+  return findMarker(signal, 14);
 }
