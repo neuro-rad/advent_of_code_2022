@@ -501,11 +501,14 @@ class MockFile {
 
 class MockDirectory {
   String name;
+  late List<String> path;
   int size = 0;
   Map<String, MockFile> files = {};
   Map<String, MockDirectory> directories = {};
 
-  MockDirectory(this.name);
+  MockDirectory(this.name, List<String> parentPath) {
+    path = [...parentPath, name];
+  }
 
   void updateSize() {
     size = 0;
@@ -526,7 +529,7 @@ class MockDirectory {
 
   void addDirectory(String name) {
     if (directories[name] != null) throw Exception("Dir already exists!");
-    MockDirectory newDir = MockDirectory(name);
+    MockDirectory newDir = MockDirectory(name, path);
     directories[name] = newDir;
   }
 
@@ -535,35 +538,49 @@ class MockDirectory {
     return('dir $name');
   }
 
-  void ls() {
-    print('ls for: $this');
-    for (var dir in directories.values) {
-      print(dir);
+  void ls(bool recursive, {int recursionDepth = 1}) {
+    switch (recursive) {
+      case false:
+        print('ls for: $path');
+        for (var file in files.values) {
+          print(file);
+        }
+        for (var dir in directories.values) {
+          print(dir);
+        }
+        break;
+      case true:
+        String leader = "-" * recursionDepth;
+        print('$leader $this');
+        for (var file in files.values) {
+          print('$leader - $file');
+        }
+        for (var dir in directories.values) {
+          dir.ls(true, recursionDepth: recursionDepth + 2);
+        }
     }
-    for (var file in files.values) {
-      print(file);
-    }
+
   }
 
-  Map<String, int> returnDirsOverSize(int size) {
-    Map<String, int> dirsToReturn = {};
+  Map<List<String>, int> returnDirsOverSize(int minSize) {
+    Map<List<String>, int> dirsToReturn = {};
     for (var dir in directories.values) {
-      if (dir.size >= size) {
-        dirsToReturn[dir.name] = dir.size;
-        var subDirectories = dir.returnDirsOverSize(size);
+      if (dir.size >= minSize) {
+        dirsToReturn[dir.path] = dir.size;
+        var subDirectories = dir.returnDirsOverSize(minSize);
         dirsToReturn.addAll(subDirectories);
       }
     }
     return(dirsToReturn);
   }
   
-  Map<String, int> returnDirsUnderSize(int size) {
-    Map<String, int> dirsToReturn = {};
+  Map<List<String>, int> returnDirsUnderSize(final int maxSize) {
+    Map<List<String>, int> dirsToReturn = {};
     for (var dir in directories.values) {
-      if (dir.size <= size) {
-        dirsToReturn[dir.name] = dir.size;
+      if (dir.size <= maxSize) {
+        dirsToReturn[dir.path] = dir.size;
       }
-      var subDirectories = dir.returnDirsUnderSize(size);
+      var subDirectories = dir.returnDirsUnderSize(maxSize);
       dirsToReturn.addAll(subDirectories);
     }
     return(dirsToReturn);
@@ -571,7 +588,7 @@ class MockDirectory {
 }
 
 class FileSystem {
-  MockDirectory root = MockDirectory("/");
+  MockDirectory root = MockDirectory("/", []);
   List<String> currentPath = ["/"];
   late MockDirectory current;
 
@@ -645,28 +662,28 @@ class FileSystem {
     return(root.size);
   }
   
-  Map<String, int> returnDirsOverSize(int size) {
-    Map<String, int> dirsToReturn = {};
+  Map<List<String>, int> returnDirsOverSize(int minSize) {
+    Map<List<String>, int> dirsToReturn = {};
     
-    if (root.size >= size) {
-      dirsToReturn[root.name] = root.size;
+    if (root.size >= minSize) {
+      dirsToReturn[root.path] = root.size;
     } else {
       return {};
     }
     
-    final subDirectories = root.returnDirsOverSize(size);
+    final subDirectories = root.returnDirsOverSize(minSize);
     dirsToReturn.addAll(subDirectories);
     return(dirsToReturn);
   }
   
-  Map<String, int> returnDirsUnderSize(int size) {
-    Map<String, int> dirsToReturn = {};
+  Map<List<String>, int> returnDirsUnderSize(final int maxSize) {
+    Map<List<String>, int> dirsToReturn = {};
 
-    if (root.size <= size) {
-      dirsToReturn[root.name] = root.size;
+    if (root.size <= maxSize) {
+      dirsToReturn[root.path] = root.size;
     } 
 
-    final subDirectories = root.returnDirsUnderSize(size);
+    final subDirectories = root.returnDirsUnderSize(maxSize);
     dirsToReturn.addAll(subDirectories);
     return(dirsToReturn);
   }
@@ -688,4 +705,26 @@ int task_13() {
     totalToReturn += dirSize;
   }
   return totalToReturn;
+}
+
+int task_14() {
+  final inputFile = File('input_files/day_7_input.txt');
+  final List<String> lines = inputFile.readAsLinesSync();
+
+  const int totalDiscSize = 70000000;
+  const int requiredDiscSize = 30000000;
+
+  FileSystem fileSystem = FileSystem();
+  for (var line in lines) {
+    fileSystem.parseLine(line);
+  }
+  fileSystem.updateSize();
+
+  final minSizeToDelete =
+      requiredDiscSize - (totalDiscSize - fileSystem.root.size);
+  final possibleDirsToDelete = fileSystem.returnDirsOverSize(minSizeToDelete);
+  final minValue = possibleDirsToDelete.values
+      .reduce((value, element) => (element < value) ? element : value);
+
+  return(minValue);
 }
