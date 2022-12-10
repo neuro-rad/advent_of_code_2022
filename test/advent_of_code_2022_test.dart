@@ -11,5 +11,15 @@ void main() {
       final visibleTrees = countVisibleTrees(lines);
       expect(visibleTrees, equals(21));
     });
+
+    test('- scenic score tree 1, 2', () {
+      final score = checkScenicScore(lines, 1, 2);
+      expect(score, equals(4));
+    });
+
+    test('- scenic score tree 3, 2', () {
+      final score = checkScenicScore(lines, 3, 2);
+      expect(score, equals(8));
+    });
   });
 }
